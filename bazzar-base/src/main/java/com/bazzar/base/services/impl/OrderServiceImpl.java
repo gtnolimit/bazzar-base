@@ -56,11 +56,22 @@ public class OrderServiceImpl implements OrderService {
 		orderDao.delete ( orderId );
 	}
 	public Order calculateOrder ( Order order ){
-		order = calculateSubTotal ( order );
-		order = calculateTax ( order );
-		//order = calculateShipping( order );
-		order = calculateTotal ( order );
+		Home home = homeDao.get((long) 1);
+		order = this.calculateSubTotal ( order );
+		order = this.calculateTax ( order, home );
+		order = this.calculateHandling ( order, home );
+		order = this.calculateShipping( order, home );
+		order = this.calculateTotal ( order );
+		orderDao.editOrder ( order );
 		return order; 
+	}
+	private Order calculateHandling ( Order order, Home home ){
+		if ( home.getShippingAndHandlingUnit () != null && home.getShippingAndHandlingUnit ().equals ( "%" ) ){
+			order.setShippingHandling ( order.getTotalBeforeTax() * home.getShippingAndHandling() / 100 );
+		}else{
+			order.setShippingHandling ( home.getShippingAndHandling ( ) );
+		}
+		return order;
 	}
 	private Order calculateSubTotal ( Order order ){
 		double subTotal = 0.00;
@@ -75,32 +86,27 @@ public class OrderServiceImpl implements OrderService {
 		order.setTotalBeforeTax(subTotal);
 		return order;
 	}
-	
-	private Order calculateTax ( Order order ){
-		Home company = homeDao.get((long) 1);
+	private Order calculateTax ( Order order, Home home ){
 		Customer cust = customerDao.get(order.getCustomer_id());
 		Set <Address> address = cust.getAddress();
 		Iterator <Address> it = address.iterator();
 		while ( it.hasNext () ){
 			Address add = it.next();
 			AddressTypeLookup addressType = add.getAddressType();
-			if ( addressType.getCode ().equals ( "B" ) && add.getState ().getCode().equals (company.getHomeState()) )
-				order.setOrderTax( order.getTotalBeforeTax() * company.getStateTax() / 100 );
+			if ( addressType.getCode ().equals ( "B" ) && add.getState ().getCode().equals (home.getHomeState()) )
+				order.setOrderTax( order.getTotalBeforeTax() * home.getStateTax() / 100 );
 		}
 		return order;
 	}
-	
-	//TODO make calculations for shipping
-	@SuppressWarnings("unused")
-	private Order calculateShipping ( Order order ){
-		double shippingAndHandling = 0.00;
-		order.setShippingHandling ( shippingAndHandling );
+	private Order calculateShipping ( Order order, Home home){
+		if ( order.getTotalBeforeTax () > home.getShippingOver () ){
+			order.setShippingRate ( 0.00 );
+		}
 		return order;
 	}
-	
 	private Order calculateTotal ( Order order ){
 		order.setOrderTotal ( order.getTotalBeforeTax() + 
-				order.getOrderTax() + order.getShippingHandling() );
+				order.getOrderTax() + order.getShippingHandling() + order.getShippingRate());
 		return order;
 	}
 

@@ -15,6 +15,8 @@ import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.bazzar.base.domain.order.Shipping;
+
 @Entity
 @Table(name="HOME")
 public class Home extends DBBase {
@@ -38,8 +40,16 @@ public class Home extends DBBase {
 	private String smtpHost;
 	@Column(name="SMTP_PORT")
 	private String smtpPort;
+	@Column(name="MERCHANT_ID")
+	private String merchantID;
 	@Column(name="STATE_TAX")
 	private double stateTax;
+	@Column(name="SHIPPING_OVER")
+	private double shippingOver;
+	@Column(name="SHIPPING_AND_HANDLING")
+	private double shippingAndHandling;
+	@Column(name="SHIPPING_AND_HANDLING_UNIT")
+	private String shippingAndHandlingUnit;	
 	
 	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY)
 	@JoinTable(
@@ -62,7 +72,45 @@ public class Home extends DBBase {
 	     inverseJoinColumns = @JoinColumn( name="PHONE_ID")
 	)
 	private Set <Phone> phone = new HashSet <Phone> ();
-	 	
+	
+	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+	@JoinTable(
+	     name="ORDER_SHIPPING",
+	     joinColumns = @JoinColumn( name="ORDER_ID"),
+	     inverseJoinColumns = @JoinColumn( name="SHIPPING_ID")
+	)
+	private Set <Shipping> shipping = new HashSet <Shipping> ();
+
+	public String getShippingAndHandlingUnit() {
+		return shippingAndHandlingUnit;
+	}
+	public void setShippingAndHandlingUnit(String shippingAndHandlingUnit) {
+		this.shippingAndHandlingUnit = shippingAndHandlingUnit;
+	}
+	public String getMerchantID() {
+		return merchantID;
+	}
+	public void setMerchantID(String merchantID) {
+		this.merchantID = merchantID;
+	}
+	public double getShippingAndHandling() {
+		return shippingAndHandling;
+	}
+	public void setShippingAndHandling(double shippingAndHandling) {
+		this.shippingAndHandling = shippingAndHandling;
+	}
+	public Set<Shipping> getShipping() {
+		return shipping;
+	}
+	public void setShipping(Set<Shipping> shipping) {
+		this.shipping = shipping;
+	}
+	public double getShippingOver() {
+		return shippingOver;
+	}
+	public void setShippingOver(double shippingOver) {
+		this.shippingOver = shippingOver;
+	}
 	public Set<Address> getAddress() {
 		return address;
 	}

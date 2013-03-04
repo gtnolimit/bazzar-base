@@ -56,6 +56,8 @@ public class Order extends DBBase implements Serializable{
 	private double totalBeforeTax;
 	@Column(name="SHIPPING_TOTAL")
 	private double shippingHandling;
+	@Column(name="SHIPPING_RATE")
+	private double shippingRate;
 	@Column(name="REFUNDABLE_TOTAL")
 	private double refundableTotal;
 	@Column(name="ORDER_TOTAL")
@@ -70,14 +72,6 @@ public class Order extends DBBase implements Serializable{
 	@ManyToOne
 	@JoinColumn(name="ORDER_STATUS")
 	private OrderStatusLookup orderStatus;
-	
-	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
-	@JoinTable(
-	     name="ORDER_SHIPPING",
-	     joinColumns = @JoinColumn( name="ORDER_ID"),
-	     inverseJoinColumns = @JoinColumn( name="SHIPPING_ID")
-	)
-	private Set <Shipping> shipping = new HashSet <Shipping> ();
 	
 	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
 	@JoinTable(
@@ -103,6 +97,13 @@ public class Order extends DBBase implements Serializable{
 	)
 	private Set <Note> note = new HashSet <Note> ();
 	
+	
+	public double getShippingRate() {
+		return shippingRate;
+	}
+	public void setShippingRate(double shippingRate) {
+		this.shippingRate = shippingRate;
+	}
 	public String getIp() {
 		return ip;
 	}
@@ -237,12 +238,6 @@ public class Order extends DBBase implements Serializable{
 	}
 	public void setOrderStatus(OrderStatusLookup orderStatus) {
 		this.orderStatus = orderStatus;
-	}
-	public Set<Shipping> getShipping() {
-		return shipping;
-	}
-	public void setShipping(Set<Shipping> shipping) {
-		this.shipping = shipping;
 	}
 	public boolean isActive() {
 		return isActive;
