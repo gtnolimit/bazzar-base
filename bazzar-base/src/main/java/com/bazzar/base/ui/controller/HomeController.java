@@ -32,6 +32,7 @@ import com.bazzar.base.services.ItemService;
 import com.bazzar.base.services.MenuService;
 import com.bazzar.base.services.OrderService;
 import com.bazzar.base.services.SearchService;
+import com.bazzar.base.services.SendEmailService;
 import com.bazzar.base.test.CreateCartTest;
 import com.bazzar.base.test.CreateItemTest;
 import com.bazzar.base.test.CreateMenuTest;
@@ -56,6 +57,8 @@ public class HomeController {
 	CustomerService custService_i;
 	@Autowired
 	HomeService homeService_i;
+	@Autowired
+	SendEmailService sendEmail_i;
 	
 	private static final String HOME_FIELD = "home";
 	private static final String ITEM_FIELD = "item";
@@ -75,6 +78,14 @@ public class HomeController {
 		menuService_i.create( cm.setCamerasCamcorders() );
 		menuService_i.create( cm.setComputers() );
 		menuService_i.create( cm.setPortableElectronics() );
+		
+		try {
+			this.sendEmail("This is a test email from Bazzar", "the menw has been created", "gtnolimit@yahoo.com");
+		}catch ( Exception e ){
+			String sMessage = "Error finding product. [%1$s]";
+			return createErrorResponse(String.format(sMessage, e.toString()));
+		}
+		
 		return new ModelAndView(jsonView_i, HOME_FIELD, null);
 	}
 	@RequestMapping(value = "/createCartTest/", method = RequestMethod.GET)
@@ -194,5 +205,9 @@ public class HomeController {
 	}
 	private ModelAndView createErrorResponse(String sMessage) {
 		return new ModelAndView(jsonView_i, ERROR_FIELD, sMessage);
+	}
+	
+	private void sendEmail ( String subject, String body, String to) throws Exception {
+		 sendEmail_i.sendEmail(subject, body, to);
 	}
 }
