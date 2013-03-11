@@ -24,7 +24,6 @@ public class HomeDaoImpl implements HomeDao {
 	}
 
 	public Home get ( Long homeId ) {
-		System.out.println("insideHomeDao");
 		return (Home) sessionFactory.getCurrentSession ( )
 				.createQuery("FROM Home h WHERE h.id = :id")
 				.setParameter("id", homeId).uniqueResult();

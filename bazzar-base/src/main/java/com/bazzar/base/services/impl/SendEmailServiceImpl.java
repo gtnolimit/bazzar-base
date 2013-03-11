@@ -1,11 +1,15 @@
 package com.bazzar.base.services.impl;
 
+import java.util.Date;
 import java.util.Properties;
+
+import javax.mail.Authenticator;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Transport;
+import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
@@ -22,40 +26,71 @@ public class SendEmailServiceImpl implements SendEmailService{
 	@Autowired
 	HomeDao homeDao;
 	
-	private Home home;
-	
-	public void sendEmail ( String subject, String bodyText, String toEmail ){
-		final String username = "gtnolimit@gmail.com";
-		final String password = "ozi97yng";
+	public void sendSimpleEmail ( String subject, String bodyText, String toEmail )
+		throws MessagingException{
+		Home home = homeDao.get( (long) 1 );
+		
+		final String username = home.getSmtpUser ();
+		final String password = home.getSmtpPass ();
+		final String port = home.getSmtpPort();
+		final String host = home.getSmtpHost();
+		final String infoEmail = home.getInfoEmail();		
  
 		Properties props = new Properties();
 		props.put("mail.smtp.auth", "true");
 		props.put("mail.smtp.starttls.enable", "true");
-		props.put("mail.smtp.host", "smtp.gmail.com");
-		props.put("mail.smtp.port", "587");
+		props.put("mail.smtp.host", host);
+		props.put("mail.smtp.port", port);
  
 		Session session = Session.getInstance(props,
-		  new javax.mail.Authenticator() {
-			protected PasswordAuthentication getPasswordAuthentication() {
-				return new PasswordAuthentication(username, password);
+			new javax.mail.Authenticator() {
+				protected PasswordAuthentication getPasswordAuthentication() {
+					return new PasswordAuthentication( username, password );
 			}
-		  });
+		});
  
-		try {
- 
-			Message message = new MimeMessage(session);
-			message.setFrom(new InternetAddress("bazzar@gmail.com"));
-			message.setRecipients(Message.RecipientType.TO,
+		Message message = new MimeMessage(session);
+		message.setFrom(new InternetAddress(infoEmail));
+		message.setRecipients(Message.RecipientType.TO,
 				InternetAddress.parse( toEmail ));
-			message.setSubject( subject );
-			message.setText( bodyText );
- 
-			Transport.send(message);
-  
-		} catch (MessagingException e) {
-			throw new RuntimeException(e);
-		}
-		
+		message.setSubject( subject );
+		message.setText( bodyText );
+ 	}
 
-	}
+	public void sendHtmlEmail( String subject, String message, String toAddress ) 
+    		throws AddressException, MessagingException {
+ 
+		Home home = homeDao.get( (long) 1 );
+		
+		final String username = home.getSmtpUser ();
+		final String password = home.getSmtpPass ();
+		final String port = home.getSmtpPort();
+		final String host = home.getSmtpHost();
+		final String infoEmail = home.getInfoEmail();		
+
+        Properties properties = new Properties();
+        properties.put("mail.smtp.host", host);
+        properties.put("mail.smtp.port", port);
+        properties.put("mail.smtp.auth", "true");
+        properties.put("mail.smtp.starttls.enable", "true");
+ 
+        Authenticator auth = new Authenticator() {
+            public PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(username, password);
+            }
+        };
+ 
+        Session session = Session.getInstance(properties, auth);
+        Message msg = new MimeMessage(session);
+ 
+        msg.setFrom(new InternetAddress(infoEmail));
+        InternetAddress[] toAddresses = { new InternetAddress(toAddress) };
+        msg.setRecipients(Message.RecipientType.TO, toAddresses);
+        msg.setSubject(subject);
+        msg.setSentDate(new Date());
+        msg.setContent(message, "text/html");
+ 
+        Transport.send(msg);
+    }
+ 
 }

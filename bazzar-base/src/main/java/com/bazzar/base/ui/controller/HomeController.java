@@ -26,6 +26,7 @@ import com.bazzar.base.domain.menu.Product;
 import com.bazzar.base.domain.order.Cart;
 import com.bazzar.base.domain.order.Order;
 import com.bazzar.base.services.CartService;
+import com.bazzar.base.services.CreateInvoiceService;
 import com.bazzar.base.services.CustomerService;
 import com.bazzar.base.services.HomeService;
 import com.bazzar.base.services.ItemService;
@@ -59,6 +60,8 @@ public class HomeController {
 	HomeService homeService_i;
 	@Autowired
 	SendEmailService sendEmail_i;
+	@Autowired
+	CreateInvoiceService invoice_i;
 	
 	private static final String HOME_FIELD = "home";
 	private static final String ITEM_FIELD = "item";
@@ -78,13 +81,6 @@ public class HomeController {
 		menuService_i.create( cm.setCamerasCamcorders() );
 		menuService_i.create( cm.setComputers() );
 		menuService_i.create( cm.setPortableElectronics() );
-		
-		try {
-			this.sendEmail("This is a test email from Bazzar", "the menw has been created", "gtnolimit@yahoo.com");
-		}catch ( Exception e ){
-			String sMessage = "Error finding product. [%1$s]";
-			return createErrorResponse(String.format(sMessage, e.toString()));
-		}
 		
 		return new ModelAndView(jsonView_i, HOME_FIELD, null);
 	}
@@ -192,6 +188,8 @@ public class HomeController {
 			order = orderService_i.getOrder(id);
 			order = orderService_i.calculateOrder( order );
 			orderService_i.editOrder(order);
+			//sendEmail_i.sendSimpleEmail( "Order Invoice", invoice_i.createInvoiceText( id ), "gtnolimit@yahoo.com");
+			sendEmail_i.sendHtmlEmail( "Order Invoice", invoice_i.createInvoiceHtml( id ), "gtnolimit@yahoo.com");
 		} catch (Exception e) {
 			String sMessage = "Error finding product. [%1$s]";
 			return createErrorResponse(String.format(sMessage, e.toString()));
@@ -205,9 +203,5 @@ public class HomeController {
 	}
 	private ModelAndView createErrorResponse(String sMessage) {
 		return new ModelAndView(jsonView_i, ERROR_FIELD, sMessage);
-	}
-	
-	private void sendEmail ( String subject, String body, String to) throws Exception {
-		 sendEmail_i.sendEmail(subject, body, to);
 	}
 }
