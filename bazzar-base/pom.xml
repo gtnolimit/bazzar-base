@@ -33,6 +33,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
+                <version>2.3</version>
 				<configuration>
 					<warName>${context.path}</warName>
 				</configuration>
@@ -110,21 +111,6 @@
 <dependency>
 	<groupId>org.hibernate</groupId>
 	<artifactId>hibernate-annotations</artifactId>
-	<version>${hibernate.version}</version>
-</dependency>
-<dependency>
-	<groupId>org.hibernate</groupId>
-	<artifactId>hibernate-annotations</artifactId>
-	<version>${hibernate.version}</version>
-</dependency>
-<dependency>
-	<groupId>org.hibernate</groupId>
-	<artifactId>hibernate-entitymanager</artifactId>
-	<version>${hibernate.version}</version>
-</dependency>
-<dependency>
-	<groupId>org.hibernate</groupId>
-	<artifactId>hibernate-entitymanager</artifactId>
 	<version>${hibernate.version}</version>
 </dependency>
 <dependency>
