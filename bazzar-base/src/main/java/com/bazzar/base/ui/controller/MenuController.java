@@ -71,7 +71,7 @@ public class MenuController {
 	public ModelAndView getCategories() {
 		return new ModelAndView(jsonView_i, CATEGORY_FIELD, menuService_i.getAllCategories());
 	}
-	@RequestMapping(value = "/menu/subCategor/", method = RequestMethod.GET)
+	@RequestMapping(value = "/menu/subCategory/", method = RequestMethod.GET)
 	public ModelAndView getSubCategories() {
 		return new ModelAndView(jsonView_i, SUBCATEGORY_FIELD, menuService_i.getAllSubCategories());
 	}

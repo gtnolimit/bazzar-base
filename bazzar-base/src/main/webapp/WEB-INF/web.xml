@@ -3,9 +3,7 @@
   <display-name>Bazzar Online</display-name>
   <context-param>
     <param-name>contextConfigLocation</param-name>
-    <param-value>  
-               /WEB-INF/config/rest-services-config.xml;classpath:applicationContext.xml  
-          </param-value>
+    <param-value>classpath:rest-services-config.xml;classpath:applicationContext.xml</param-value>
   </context-param>
   <listener>
     <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
@@ -27,7 +25,7 @@
 	<!-- -->
 	<filter>
     		<filter-name>openSessionInViewFilter</filter-name>
-    		<filter-class>org.springframework.orm.hibernate3.support.OpenSessionInViewFilter</filter-class>
+    		<filter-class>org.springframework.orm.hibernate4.support.OpenSessionInViewFilter</filter-class>
 		<init-param>
         		<param-name>singleSession</param-name>
         		<param-value>false</param-value>

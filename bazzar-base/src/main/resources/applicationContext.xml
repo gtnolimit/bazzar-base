@@ -20,7 +20,7 @@
 	
 	<mvc:annotation-driven /> 
 	
-	<context:property-placeholder location="classpath:config.properties" />
+	<context:property-placeholder location="classpath:config.properties,classpath:redis.properties" />
 	
 	<!-- bean id="userService" class="com.example.my.services.user.UserServiceImpl " -->
 	
@@ -31,26 +31,31 @@
 	<tx:annotation-driven transaction-manager="transactionManager" />
     
     <bean 	id="transactionManager" 
-    		class="org.springframework.orm.hibernate3.HibernateTransactionManager" 
+    		class="org.springframework.orm.hibernate4.HibernateTransactionManager" 
        		p:sessionFactory-ref="sessionFactory" />
 	
-	<bean id="sessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+	<bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
 	    <property name="dataSource" ref="dataSource"/>
 	    <property name="hibernateProperties">
 	      <props>        
 	            <prop key="hibernate.dialect">${hibernate.dialect}</prop>          
 	            <prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
-	            <prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto}</prop>
+	            <prop key="hibernate.jdbc.batch_size">${hibernate.jdbc.batch_size}</prop>
+                <prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto}</prop>
 	       </props>
 	    </property>
 		<property name="packagesToScan" value="com.bazzar.base"></property>
 	</bean>
 		
-	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource"
-			p:driverClassName="${jdbc.driverClassName}"
-			p:url="${jdbc.url}"
-			p:username="${jdbc.username}"
-			p:password="${jdbc.password}"/>
-	  
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">  
+        <property name="driverClass" value="${jdbc.driverClassName}"></property>  
+        <property name="jdbcUrl" value="${jdbc.url}"></property>  
+        <property name="user" value="${jdbc.username}"></property>  
+        <property name="password" value="${jdbc.password}"></property>  
+        <property name="initialPoolSize" value="1"></property>  
+        <property name="minPoolSize" value="1"></property>  
+        <property name="maxPoolSize" value="10"></property>  
+        <property name="maxIdleTime" value="1800"></property>  
+    </bean>
 	
 </beans>
