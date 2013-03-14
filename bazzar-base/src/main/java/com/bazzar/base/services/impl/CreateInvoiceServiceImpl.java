@@ -244,7 +244,7 @@ public class CreateInvoiceServiceImpl implements CreateInvoiceService{
 			OrderDetail orderDetail = it.next ();
 			Item item = itemDao.getItem ( orderDetail.getItemId () );
 			double total = orderDetail.getPrice () * orderDetail.getQty ();
-			sb.append ( PIPE + counter + TAB + PIPE + item.getSubgect () + TAB + TAB + PIPE + orderDetail.getQty () + TAB + PIPE + orderDetail.getPrice() + TAB + PIPE + total );
+			sb.append ( PIPE + counter + TAB + PIPE + item.getSubject () + TAB + TAB + PIPE + orderDetail.getQty () + TAB + PIPE + orderDetail.getPrice() + TAB + PIPE + total );
 			sb.append ( NEW_LINE );
 			counter ++;
 		}
@@ -327,7 +327,7 @@ public class CreateInvoiceServiceImpl implements CreateInvoiceService{
 				break;
 			}
 			sb.append ("\"></td>" );
-			sb.append ( "<td width=\"600\" align=\"center\"><font size=\"2\">" + item.getSubgect() + "</font></td>" );
+			sb.append ( "<td width=\"600\" align=\"center\"><font size=\"2\">" + item.getSubject() + "</font></td>" );
 			sb.append ( "<td width=\"50\" align=\"center\"><font size=\"2\">" + orderDetail.getQty() + "</font></td>" );
 			sb.append ( "<td width=\"100\" align=\"center\"><font size=\"2\">$ " + orderDetail.getPrice() + "</font></td>" );
 			double total = orderDetail.getPrice() * orderDetail.getQty() ;

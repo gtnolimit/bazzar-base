@@ -2,6 +2,8 @@ package com.bazzar.base.services;
 
 import java.util.List;
 
+import net.sf.json.JSONObject;
+
 import com.bazzar.base.domain.item.Item;
 
 public interface ItemService {
@@ -16,4 +18,7 @@ public interface ItemService {
 	public Long addItem ( Item item );
 	public void delete ( Long id );
 	public void delete ( Item item );
+
+	public Long importItems(JSONObject json);
+	public JSONObject validateImportItemRequest(String json);
 }

@@ -33,4 +33,15 @@ public interface MenuDao {
 	public void deleteCategory ( Long categoryId );
 	public void deleteSubCategory ( Long subCategoryId );
 	public void deleteProduct ( Long productId );
+
+	public Product getProductByAttribute(String attribute);
+
+	public SubCategory getSubCategoryByAttribute(String attribute);
+
+	public Category getCategoryByAttribute(String attribute);
+
+	public SubCategory findSubCategoryChild(String category, String subCategory);
+
+	public Product findProductChild(String category, String subCategory,
+	        String product);
 }

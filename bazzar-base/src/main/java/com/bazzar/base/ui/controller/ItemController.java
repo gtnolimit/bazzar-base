@@ -60,7 +60,7 @@ public class ItemController {
 			System.out.println("looking for item : " + itemId);
 			_id = Long.parseLong ( itemId );
 			item = itemService_i.getItem ( _id );
-			System.out.println(" Item found : " + item.getSubgect());
+			System.out.println(" Item found : " + item.getSubject());
 		} catch (Exception e) {
 			String sMessage = "Error converting ID into numeric value";
 			return createErrorResponse(String.format(sMessage, e.toString()));

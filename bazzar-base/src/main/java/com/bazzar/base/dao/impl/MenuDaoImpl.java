@@ -130,4 +130,51 @@ public class MenuDaoImpl implements MenuDao {
 		edit ( product );
 	}
 
+	public Product getProductByAttribute(String attribute) {
+		Query q = sessionFactory.getCurrentSession().createQuery(
+		        "FROM Product prd where prd.attribute = :attribute");
+		q.setParameter("attribute", attribute);
+		return (Product) q.uniqueResult();
+	}
+
+	public SubCategory getSubCategoryByAttribute(String attribute) {
+		Query q = sessionFactory.getCurrentSession().createQuery(
+		        "FROM SubCategory sub where sub.attribute = :attribute");
+		q.setParameter("attribute", attribute);
+		return (SubCategory) q.uniqueResult();
+	}
+
+	public Category getCategoryByAttribute(String attribute) {
+		Query q = sessionFactory.getCurrentSession().createQuery(
+		        "FROM Category cat where cat.attribute = :attribute");
+		q.setParameter("attribute", attribute);
+		return (Category) q.uniqueResult();
+	}
+
+	public SubCategory findSubCategoryChild(String category, String subCategory) {
+		Query q = sessionFactory.getCurrentSession().createQuery(
+		        "select subCat FROM Category cat "
+		                + "join cat.subCategory subCat "
+		                + "where cat.attribute = :catName "
+		                + "and subCat.attribute = :subCatName");
+		q.setParameter("catName", category).setParameter("subCatName",
+		        subCategory);
+		return (SubCategory) q.uniqueResult();
+	}
+
+	public Product findProductChild(String category, String subCategory,
+	        String product) {
+		Query q = sessionFactory.getCurrentSession().createQuery(
+		        "select prd FROM Category cat "
+		                + "join cat.subCategory subCat "
+		                + "join subCat.product prd "
+		                + "where cat.attribute = :catName "
+		                + "and subCat.attribute = :subCatName "
+		                + "and prd.attribute = :prdName");
+		q.setParameter("catName", category)
+		        .setParameter("subCatName", subCategory)
+		        .setParameter("prdName", product);
+		return (Product) q.uniqueResult();
+	}
+
 }
