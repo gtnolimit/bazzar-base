@@ -5,6 +5,7 @@ import com.bazzar.base.domain.order.Cart;
 public interface CartService {
 
 	public Long create ( Cart cart );
+	public void saveOrUpdate(Cart cart);
 	public void delete ( Cart cart );
 	public void delete ( Long cartId );
 	public Cart edit ( Cart cart );
@@ -15,5 +16,7 @@ public interface CartService {
 	public Cart findCartByIp ( String ip );
 	
 	public Cart calculateSubTotal ( Cart cart );
+	public Cart findCartDetailBySessionAndItemId(String sessionNumber, Long itemId);
+	public Cart deleteCartDetail(Long cartId, Long detailId);
 
 }

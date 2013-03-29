@@ -53,6 +53,18 @@
 					<warName>${context.path}</warName>
 				</configuration>
 			</plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-eclipse-plugin</artifactId>
+                <version>2.9</version>
+                <configuration>
+                    <projectNameTemplate>[artifactId]</projectNameTemplate>
+                    <wtpmanifest>true</wtpmanifest>
+                    <wtpapplicationxml>true</wtpapplicationxml>
+                    <wtpversion>2.0</wtpversion>
+                    <manifest>${basedir}/src/main/webapp/META-INF/MANIFEST.MF</manifest>
+                </configuration>
+            </plugin>
 		</plugins>
 	</build>
 
