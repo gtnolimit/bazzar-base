@@ -2,6 +2,8 @@ package com.bazzar.base.ui.controller;
 
 import javax.servlet.http.HttpServletResponse;
 
+import net.sf.json.JSONObject;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -116,6 +118,22 @@ public class CartController {
 		httpResponse_p.setHeader("cart", request_p.getContextPath() + "/cart/"
 		        + cart_p.getId());
 		return new ModelAndView(jsonView_i, CART_FIELD, cart_p);
+	}
+
+	@RequestMapping(value = { "/cart/update/quantity" }, method = { RequestMethod.PUT })
+	public ModelAndView updateQuantity(@RequestBody JSONObject cartData,
+	        HttpServletResponse httpResponse_p, WebRequest request_p) {
+		Cart cart = null;
+		try {
+			cart = cartService_i.updateQuantity(cartData);
+		} catch (Exception e) {
+			String sMessage = "Error updating cart quantities. [%1$s]";
+			return createErrorResponse(String.format(sMessage, e.toString()));
+		}
+		httpResponse_p.setStatus(HttpStatus.CREATED.value());
+		httpResponse_p.setHeader("cart", request_p.getContextPath() + "/cart/"
+		        + cart.getId());
+		return new ModelAndView(jsonView_i, CART_FIELD, cart);
 	}
 
 	@RequestMapping(value = { "/cart/find/session/{sessionId}/item/{itemId}" }, method = { RequestMethod.GET })

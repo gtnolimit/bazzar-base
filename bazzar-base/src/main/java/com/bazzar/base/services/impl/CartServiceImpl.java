@@ -3,6 +3,8 @@ package com.bazzar.base.services.impl;
 import java.util.Iterator;
 import java.util.Set;
 
+import net.sf.json.JSONObject;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -69,16 +71,38 @@ public class CartServiceImpl implements CartService {
 		return cart;
 	}
 
-	public Cart findCartDetailBySessionAndItemId(String sessionNumber, Long itemId) {
+	public Cart findCartDetailBySessionAndItemId(String sessionNumber,
+	        Long itemId) {
 		return cartDao.findCartDetailBySessionAndItemId(sessionNumber, itemId);
 	}
 
 	@Override
-    public Cart deleteCartDetail(Long cartId, Long detailId) {
+	public Cart deleteCartDetail(Long cartId, Long detailId) {
 		Cart cart = cartDao.get(cartId);
-	    cart.getDetail().remove(cartDao.findCartDetailByItemId(cartId, detailId));
-        cartDao.saveOrUpdate(cart);
-        return cart;
-    }
+		cart.getDetail().remove(
+		        cartDao.findCartDetailByItemId(cartId, detailId));
+		cartDao.saveOrUpdate(cart);
+		return cart;
+	}
+
+	@Override
+	public Cart updateQuantity(JSONObject cartData) {
+		if (cartData.containsKey("details")) {
+			for (Iterator i = cartData.getJSONArray("details").iterator(); i
+			        .hasNext();) {
+				JSONObject detail = (JSONObject) i.next();
+				CartDetail cartDetail = cartDao.findCartDetailByDetailId(detail
+				        .getLong("id"));
+				cartDetail.setQty(detail.getInt("quantity"));
+				cartDao.saveOrUpdate(cartDetail);
+			}
+		}
+
+		if (cartData.containsKey("cartId")) {
+			return cartDao.get(cartData.getLong("cartId"));
+		}
+
+		return null;
+	}
 
 }

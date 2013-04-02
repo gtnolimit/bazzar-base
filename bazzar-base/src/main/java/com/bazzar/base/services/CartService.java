@@ -1,5 +1,7 @@
 package com.bazzar.base.services;
 
+import net.sf.json.JSONObject;
+
 import com.bazzar.base.domain.order.Cart;
 
 public interface CartService {
@@ -18,5 +20,6 @@ public interface CartService {
 	public Cart calculateSubTotal ( Cart cart );
 	public Cart findCartDetailBySessionAndItemId(String sessionNumber, Long itemId);
 	public Cart deleteCartDetail(Long cartId, Long detailId);
+	public Cart updateQuantity(JSONObject cartData);
 
 }

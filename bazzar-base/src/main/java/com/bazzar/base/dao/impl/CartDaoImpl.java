@@ -91,4 +91,18 @@ public class CartDaoImpl implements CartDao {
 		return (CartDetail) q.uniqueResult();
 	}
 
+	@Override
+	public CartDetail findCartDetailByDetailId(Long detailId) {
+		Query q = sessionFactory.getCurrentSession().createQuery(
+		        "select cartDetail FROM CartDetail cartDetail "
+		                + "where cartDetail.id = :detailId ");
+		q.setParameter("detailId", detailId);
+		return (CartDetail) q.uniqueResult();
+	}
+
+	@Override
+    public void saveOrUpdate(CartDetail cartDetail) {
+		sessionFactory.getCurrentSession().saveOrUpdate(cartDetail);
+    }
+
 }

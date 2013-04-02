@@ -19,5 +19,6 @@ public interface CartDao {
 	public Cart findCartDetailBySessionAndItemId( String session, Long itemId );
 	public CartDetail findCartDetailByItemId(Long id,
 	        Long detailId);
-
+	public CartDetail findCartDetailByDetailId(Long detailId);
+	public void saveOrUpdate ( CartDetail cartDetail );
 }
