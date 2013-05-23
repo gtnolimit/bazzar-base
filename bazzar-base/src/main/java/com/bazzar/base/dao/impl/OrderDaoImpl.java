@@ -39,7 +39,7 @@ protected static Logger logger = Logger.getLogger ( "OrderDao" );
 	}
 	public Order getOrderBySession ( String session ) {
 		return (Order) sessionFactory.getCurrentSession ( ).
-				createQuery ( "FROM Order o WHERE o.session = :session")
+				createQuery ( "FROM Order o WHERE o.sessionNumber = :session")
 				.setString ( "session", session ).uniqueResult();
 	}
 	public Order getOrderByIp ( String ip ) {
