@@ -120,19 +120,20 @@ public class CartController {
 		return new ModelAndView(jsonView_i, CART_FIELD, cart_p);
 	}
 
-	@RequestMapping(value = { "/cart/update/quantity" }, method = { RequestMethod.PUT })
-	public ModelAndView updateQuantity(@RequestBody JSONObject cartData,
+	@RequestMapping(value = { "/cart/{cartId}/update/quantity" }, method = { RequestMethod.PUT })
+	public ModelAndView updateQuantity(@PathVariable("cartId") Long cartId,
+	        @RequestBody JSONObject cartData,
 	        HttpServletResponse httpResponse_p, WebRequest request_p) {
 		Cart cart = null;
 		try {
-			cart = cartService_i.updateQuantity(cartData);
+			cart = cartService_i.updateQuantity(cartId, cartData);
 		} catch (Exception e) {
 			String sMessage = "Error updating cart quantities. [%1$s]";
 			return createErrorResponse(String.format(sMessage, e.toString()));
 		}
 		httpResponse_p.setStatus(HttpStatus.CREATED.value());
 		httpResponse_p.setHeader("cart", request_p.getContextPath() + "/cart/"
-		        + cart.getId());
+		        + cart.getId() + "/update/quantity");
 		return new ModelAndView(jsonView_i, CART_FIELD, cart);
 	}
 

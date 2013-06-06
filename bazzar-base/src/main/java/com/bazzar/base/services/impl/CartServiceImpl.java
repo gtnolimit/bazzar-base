@@ -86,7 +86,7 @@ public class CartServiceImpl implements CartService {
 	}
 
 	@Override
-	public Cart updateQuantity(JSONObject cartData) {
+	public Cart updateQuantity(Long cartId, JSONObject cartData) {
 		if (cartData.containsKey("details")) {
 			for (Iterator i = cartData.getJSONArray("details").iterator(); i
 			        .hasNext();) {
@@ -98,8 +98,8 @@ public class CartServiceImpl implements CartService {
 			}
 		}
 
-		if (cartData.containsKey("cartId")) {
-			return cartDao.get(cartData.getLong("cartId"));
+		if (cartId != null) {
+			return cartDao.get(cartId);
 		}
 
 		return null;

@@ -20,6 +20,6 @@ public interface CartService {
 	public Cart calculateSubTotal ( Cart cart );
 	public Cart findCartDetailBySessionAndItemId(String sessionNumber, Long itemId);
 	public Cart deleteCartDetail(Long cartId, Long detailId);
-	public Cart updateQuantity(JSONObject cartData);
+	public Cart updateQuantity(Long cartId, JSONObject cartData);
 
 }
