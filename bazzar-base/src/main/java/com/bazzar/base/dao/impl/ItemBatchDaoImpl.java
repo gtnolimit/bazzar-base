@@ -39,6 +39,8 @@ public class ItemBatchDaoImpl implements ItemBatchDao {
 				session.clear();
 			}
 		}
+		session.flush();
+		session.clear();
 		session.evict(product);
 		product = null;
 		tx.commit();

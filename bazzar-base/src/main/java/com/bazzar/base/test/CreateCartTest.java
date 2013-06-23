@@ -30,12 +30,12 @@ public class CreateCartTest {
 		}
 		else{
 			cart_t = cart;
-			detail = cart.getDetail();
+			detail = cart.getDetails();
 		}
 		cart_t.setUPD( new Date());
 		detail.add(this.setCartDetail(item, qty));
 		cart_t.setItemCount(detail.size());
-		cart_t.setDetail(detail);
+		cart_t.setDetails(detail);
 		return cart_t;
 	}
 

@@ -64,7 +64,7 @@ public class CreateOrderTest {
 		order.setIp ( cart.getIp ( ) );
 		order.setSessionNumber ( cart.getSessionNumber ( ) );
 		order.setOrderStatus ( OrderStatusLookup.CR );
-		order.setDetail ( this.setOrderDetail ( cart.getDetail ( ) ) );
+		order.setDetail ( this.setOrderDetail ( cart.getDetails ( ) ) );
 		order.setTotalBeforeTax ( cart.getShoppingCartSubTotal ( ) ); 
 		return order;
 	}

@@ -61,7 +61,7 @@ public class CartServiceImpl implements CartService {
 
 	public Cart calculateSubTotal(Cart cart) {
 		double subTotal = 0.00;
-		Set<CartDetail> detail = cart.getDetail();
+		Set<CartDetail> detail = cart.getDetails();
 		Iterator<CartDetail> it = detail.iterator();
 		while (it.hasNext()) {
 			CartDetail cd = (CartDetail) it.next();
@@ -79,7 +79,7 @@ public class CartServiceImpl implements CartService {
 	@Override
 	public Cart deleteCartDetail(Long cartId, Long detailId) {
 		Cart cart = cartDao.get(cartId);
-		cart.getDetail().remove(
+		cart.getDetails().remove(
 		        cartDao.findCartDetailByItemId(cartId, detailId));
 		cartDao.saveOrUpdate(cart);
 		return cart;
@@ -93,7 +93,7 @@ public class CartServiceImpl implements CartService {
 				JSONObject detail = (JSONObject) i.next();
 				CartDetail cartDetail = cartDao.findCartDetailByDetailId(detail
 				        .getLong("id"));
-				cartDetail.setQty(detail.getInt("quantity"));
+				cartDetail.setQty(detail.getInt("qty"));
 				cartDao.saveOrUpdate(cartDetail);
 			}
 		}

@@ -43,7 +43,7 @@ public class Cart extends DBBase implements Serializable{
 	     name="CART_DETAILS",
 	     joinColumns = @JoinColumn( name="CART_ID"),
 	     inverseJoinColumns = @JoinColumn( name="DETAIL_ID")
-	)private Set <CartDetail> detail = new HashSet <CartDetail> ();
+	)private Set <CartDetail> details = new HashSet <CartDetail> ();
 	
 	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
 	@JoinTable(
@@ -77,11 +77,11 @@ public class Cart extends DBBase implements Serializable{
 	public void setCustomer_id(String customer_id) {
 		this.customer_id = customer_id;
 	}
-	public Set<CartDetail> getDetail() {
-		return detail;
+	public Set<CartDetail> getDetails() {
+		return details;
 	}
-	public void setDetail(Set<CartDetail> detail) {
-		this.detail = detail;
+	public void setDetails(Set<CartDetail> details) {
+		this.details = details;
 	}
 	
 	public double getShoppingCartSubTotal() {

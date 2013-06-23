@@ -83,7 +83,7 @@ public class CartDaoImpl implements CartDao {
 	public CartDetail findCartDetailByItemId(Long id,
 	        Long detailId) {
 		Query q = sessionFactory.getCurrentSession().createQuery(
-		        "select detail FROM Cart cart " + "join cart.detail detail "
+		        "select detail FROM Cart cart " + "join cart.details detail "
 		                + "where cart.id = :id "
 		                + "and detail.id = :detailId");
 		q.setParameter("id", id).setParameter("detailId",
