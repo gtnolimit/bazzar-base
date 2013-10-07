@@ -11,8 +11,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinTable;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -23,12 +23,17 @@ import org.hibernate.annotations.Where;
 import com.bazzar.base.domain.DBBase;
 import com.bazzar.base.domain.Picture;
 import com.bazzar.base.domain.item.Item;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 
 @Entity
 @Table(name = "PRODUCT")
 @Where(clause="STATUS=1")
 @Proxy(lazy=true)
+@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
 public class Product extends DBBase  implements Serializable{
 
 	private static final long serialVersionUID = 2013406734640664822L;
@@ -45,6 +50,12 @@ public class Product extends DBBase  implements Serializable{
 	@JoinColumn(name="PICTURE_ID")
 	private Picture picture;
 	
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@JoinTable(name = "SUBCATEGORY_PRODUCT", joinColumns = @JoinColumn(name = "PRODUCT_ID"), inverseJoinColumns = @JoinColumn(name = "SUBCATEGORY_ID"))
+	@JsonIgnoreProperties({ "children" })
+	private SubCategory parent;
+
+	@JsonProperty("children")
 	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY)
  	@JoinTable(
 	     name="PRODUCT_ITEM",
@@ -58,6 +69,12 @@ public class Product extends DBBase  implements Serializable{
 	}
 	public void setPicture(Picture picture) {
 		this.picture = picture;
+	}
+	public SubCategory getParent() {
+		return parent;
+	}
+	public void setParent(SubCategory parent) {
+		this.parent = parent;
 	}
 	public Long getId() {
 		return id;

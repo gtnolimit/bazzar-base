@@ -19,10 +19,14 @@ import javax.persistence.Table;
 import org.hibernate.annotations.Where;
 
 import com.bazzar.base.domain.DBBase;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity
 @Table(name = "CATEGORY") 
 @Where(clause="STATUS=1")
+@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
 public class Category extends DBBase implements Serializable{
 	
 	private static final long serialVersionUID = 2013406734640664822L;
@@ -35,6 +39,7 @@ public class Category extends DBBase implements Serializable{
 	@Column(name="STATUS")
 	private boolean isActive;
  	
+	@JsonProperty("children")
  	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
  	@JoinTable(
 	     name="CATEGORY_SUBCATEGORY",

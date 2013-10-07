@@ -14,15 +14,21 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Where;
 
 import com.bazzar.base.domain.DBBase;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity
 @Table(name = "SUBCATEGORY")
 @Where(clause="STATUS=1")
+@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
 public class SubCategory  extends DBBase implements Serializable{
 
 	private static final long serialVersionUID = 2013406734640664822L;
@@ -35,6 +41,12 @@ public class SubCategory  extends DBBase implements Serializable{
 	@Column(name="STATUS")
 	private boolean isActive;
 	
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@JoinTable(name = "CATEGORY_SUBCATEGORY", joinColumns = @JoinColumn(name = "SUBCATEGORY_ID"), inverseJoinColumns = @JoinColumn(name = "CATEGORY_ID"))
+	@JsonIgnoreProperties({ "children" })
+	private Category parent;
+
+	@JsonProperty("children")
 	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
 	@JoinTable(
 	     name="SUBCATEGORY_PRODUCT",
@@ -60,6 +72,12 @@ public class SubCategory  extends DBBase implements Serializable{
 	}
 	public void setActive(boolean isActive) {
 		this.isActive = isActive;
+	}
+	public Category getParent() {
+		return parent;
+	}
+	public void setParent(Category parent) {
+		this.parent = parent;
 	}
 	public Set<Product> getProduct() {
 		return product;
