@@ -105,16 +105,14 @@ public class OrderController {
 	public ModelAndView createOrder(@RequestBody Order order_p,
 			HttpServletResponse httpResponse_p, WebRequest request_p) {
 
-		Long createOrderId;
 		try {
-			createOrderId = (long) orderService_i.createOrder ( order_p );
-			order_p.setId( createOrderId );
+			orderService_i.createOrUpdateOrder ( order_p );
 		} catch (Exception e) {
 			String sMessage = "Error creating new category. [%1$s]";
 			return createErrorResponse(String.format(sMessage, e.toString()));
 		}
 		httpResponse_p.setStatus(HttpStatus.CREATED.value());
-		httpResponse_p.setHeader("order", request_p.getContextPath() + "/order/" + createOrderId);
+		httpResponse_p.setHeader("order", request_p.getContextPath() + "/order/" + order_p.getId());
 		return new ModelAndView(jsonView_i, ORDER_FIELD, order_p );
 	}
 	@RequestMapping(value = "/order/", method = RequestMethod.GET)

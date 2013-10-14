@@ -37,8 +37,8 @@ public class OrderServiceImpl implements OrderService {
 	public Order getOrder(Long orderId) {
 		return orderDao.getOrder(orderId);
 	}
-	public Long createOrder(Order order) {
-		return orderDao.createOrder(order);
+	public void createOrUpdateOrder(Order order) {
+		orderDao.createOrUpdateOrder(order);
 	}
 	public void editOrder(Order order) {
 		orderDao.editOrder(order);

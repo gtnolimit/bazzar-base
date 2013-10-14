@@ -14,11 +14,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.View;
-
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.View;
 
 import com.bazzar.base.domain.customer.Customer;
 import com.bazzar.base.domain.item.Item;
@@ -149,8 +148,7 @@ public class HomeController {
 			Cart cart = cartService_i.get(id);
 			CreateOrderTest cot = new CreateOrderTest ();
 			order = cot.createOrder(cart);
-			@SuppressWarnings("unused")
-			Long orderId = orderService_i.createOrder(order);
+			orderService_i.createOrUpdateOrder(order);
 			cartService_i.delete(id);
 		} catch (Exception e) {
 			String sMessage = "Error finding product. [%1$s]";
